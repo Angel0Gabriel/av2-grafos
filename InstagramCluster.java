@@ -41,12 +41,27 @@ public class InstagramCluster {
         }
     }
 
+    public void printGraph() {
+    for (int user : graph.keySet()) {
+        System.out.print(user + ": ");
+        for (int friend : graph.get(user)) {
+            System.out.print(friend + " ");
+        }
+        System.out.println();
+    }
+    
+}
+
     public static void main(String[] args) {
         InstagramCluster instagram = new InstagramCluster();
         instagram.addConnection(1, 2);
         instagram.addConnection(1, 3);
         instagram.addConnection(2, 3);
         instagram.addConnection(4, 5);
+        instagram.addConnection(5, 6);
+        instagram.addConnection(6, 7);
+        instagram.addConnection(7, 8);
+        instagram.printGraph();
         List<List<Integer>> clusters = instagram.findClusters();
         System.out.println(clusters);
     }
@@ -176,4 +191,45 @@ o seguinte:
 [[1, 2, 3], [4, 5]]
 
 Ou seja, a rede possui dois agrupamentos de usuários: (1, 2, 3) e (4, 5).
+
+Para imprimir o grafo, podemos adicionar um novo método à classe InstagramCluster que percorre todos os usuários e imprime seus amigos correspondentes. 
+Aqui está um exemplo de como o código ficaria:
+
+public void printGraph() {
+    for (int user : graph.keySet()) {
+        System.out.print(user + ": ");
+        for (int friend : graph.get(user)) {
+            System.out.print(friend + " ");
+        }
+        System.out.println();
+    }
+}
+O método printGraph percorre todas as chaves do mapa graph e imprime o número do usuário seguido pelos seus amigos correspondentes. Cada linha representa um usuário diferente.
+
+Agora, podemos chamar o método printGraph no método main para imprimir o grafo completo antes de encontrar os agrupamentos:
+
+public static void main(String[] args) {
+    InstagramCluster instagram = new InstagramCluster();
+    instagram.addConnection(1, 2);
+    instagram.addConnection(1, 3);
+    instagram.addConnection(2, 3);
+    instagram.addConnection(4, 5);
+    instagram.addConnection(5, 6);
+    instagram.addConnection(6, 7);
+    instagram.addConnection(7, 8);
+    instagram.printGraph();
+    List<List<Integer>> clusters = instagram.findClusters();
+    System.out.println(clusters);
+}
+O resultado impresso na tela seria o seguinte:
+
+1: 2 3 
+2: 1 3 
+3: 1 2 
+4: 5 
+5: 4 
+[[1, 2, 3], [4, 5]]
+
+Isso significa que o usuário 1 tem conexões com os usuários 2 e 3, o usuário 2 tem conexões com os usuários 1 e 3 e assim por diante. 
+A linha em branco separa a saída do grafo da saída dos agrupamentos.
 */
