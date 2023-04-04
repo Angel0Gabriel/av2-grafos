@@ -77,11 +77,7 @@ enquanto os usuários 4 e 5 formam outro.
 */
 
 /*
-Claro! Vou explicar cada parte do código com mais detalhes:
-
-java
-Copy code
-import java.util.*;
+Explicação detalhada de cada parte do código:
 
 public class InstagramCluster {
     // Representa o grafo da rede social
@@ -89,8 +85,6 @@ public class InstagramCluster {
 Esta é a classe InstagramCluster, que representa o grafo da rede social. A estrutura de dados escolhida para representar o grafo é um Map de inteiros para listas de inteiros. 
 Cada chave do mapa representa um usuário da rede social e o valor correspondente é uma lista de seus amigos.
 
-java
-Copy code
     // Adiciona uma conexão entre dois usuários
     public void addConnection(int user1, int user2) {
         if (!graph.containsKey(user1)) {
@@ -102,11 +96,10 @@ Copy code
         graph.get(user1).add(user2);
         graph.get(user2).add(user1);
     }
+
 Este método adiciona uma conexão entre dois usuários, o que significa que eles se tornam amigos na rede social. O método primeiro verifica se cada usuário já está no mapa. 
 Se não estiver, ele adiciona o usuário ao mapa com uma lista vazia de amigos. Em seguida, o método adiciona cada usuário à lista de amigos do outro.
 
-java
-Copy code
     // Executa o algoritmo DFS para encontrar os clusters
     public List<List<Integer>> findClusters() {
         List<List<Integer>> clusters = new ArrayList<>();
@@ -120,12 +113,11 @@ Copy code
         }
         return clusters;
     }
+
 Este método executa o algoritmo DFS para encontrar os clusters na rede social. Ele começa criando uma lista vazia de clusters e um conjunto vazio de usuários visitados. 
 Em seguida, ele percorre todos os usuários no mapa e verifica se cada um já foi visitado. Se não foi visitado, o método chama o algoritmo DFS a partir desse usuário para 
 encontrar todos os seus amigos alcançáveis. Quando o DFS termina, a lista de amigos alcançáveis é adicionada ao cluster.
 
-java
-Copy code
     // Algoritmo DFS
     private void dfs(int user, Set<Integer> visited, List<Integer> cluster) {
         visited.add(user);
@@ -136,6 +128,7 @@ Copy code
             }
         }
     }
+
 Este é o algoritmo DFS, que é chamado pelo método findClusters para encontrar os amigos alcançáveis a partir de um usuário. 
 Ele começa marcando o usuário como visitado e adicionando-o à lista de amigos alcançáveis (cluster). Em seguida, o algoritmo percorre todos os amigos do usuário 
 e verifica se cada amigo já foi visitado. Se o amigo ainda não foi visitado, o algoritmo chama a si próprio recursivamente a partir desse amigo para encontrar todos os seus amigos alcançáveis.
@@ -149,6 +142,7 @@ private void dfs(int user, Set<Integer> visited, List<Integer> cluster) {
         }
     }
 }
+
 O método dfs é uma implementação do algoritmo de busca em profundidade (DFS - Depth-First Search), que percorre o grafo a partir de um vértice inicial até que todos os vértices alcançáveis 
 sejam visitados.
 
@@ -204,6 +198,7 @@ public void printGraph() {
         System.out.println();
     }
 }
+
 O método printGraph percorre todas as chaves do mapa graph e imprime o número do usuário seguido pelos seus amigos correspondentes. Cada linha representa um usuário diferente.
 
 Agora, podemos chamar o método printGraph no método main para imprimir o grafo completo antes de encontrar os agrupamentos:
@@ -221,6 +216,7 @@ public static void main(String[] args) {
     List<List<Integer>> clusters = instagram.findClusters();
     System.out.println(clusters);
 }
+
 O resultado impresso na tela seria o seguinte:
 
 1: 2 3 
