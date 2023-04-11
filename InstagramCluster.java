@@ -9,6 +9,7 @@ public class InstagramCluster {
 
     private void orderGraph(Map<String, List<String>> graph) {
         TreeMap<String, List<String>> sortedGraph = new TreeMap<>(graph); // Usando TreeMap pois já ordena o key set
+        // Ordenando vizinhos de cada vertice
         for (String key : sortedGraph.keySet()) {
             List<String> neighbors = sortedGraph.get(key);
             Collections.sort(neighbors);
@@ -17,62 +18,77 @@ public class InstagramCluster {
         this.graph = sortedGraph;
     }
 
+    /**
+     * Primeiro DFS, retorna a lista na ordem de vertices finalizados.
+     */
     public List<String> dfs() {
-        List<String> finished = new ArrayList<>();
+        // Gera estruturas de dados para finalizados e visitados.
+        LinkedList<String> finished = new LinkedList<>();
         Set<String> visited = new HashSet<>();
-        for (String node : graph.keySet()) {
-            if (!visited.contains(node)) {
-                dfsVisit(node, visited, finished);
+        for (String node : graph.keySet()) { // Itera cada vertice no grafo
+            if (!visited.contains(node)) { // Verifica se vertice já foi visitado.
+                dfsVisit(node, visited, finished); // Realiza dfs no vertice visitado.
             }
         }
-        Collections.reverse(finished);
+        // Após toda iteração e recursividade, retorna a lista na ordem dos que foram finalizados.
         return finished;
     }
 
-    private void dfsVisit(String node, Set<String> visited, List<String> finished) {
-        visited.add(node);
-        for (String neighbor : graph.get(node)) {
-            if (!visited.contains(neighbor)) {
-                dfsVisit(neighbor, visited, finished);
+    /**
+     * DFS Para os vertices que estão sendo visitados.
+     */
+    private void dfsVisit(String node, Set<String> visited, LinkedList<String> finished) {
+        visited.add(node); // Adiciona vertice na lista de visitados.
+        for (String neighbor : graph.get(node)) { // Itera cada vizinho do vertice visitado. Indo mais fundo possivel
+            if (!visited.contains(neighbor)) { // Verifica se vizinho já foi marcado como visitado
+                dfsVisit(neighbor, visited, finished); // Faz recursividade para marcar a maior quantidade de vertices possiveis como visitados.
             }
         }
-        finished.add(node);
+        finished.addFirst(node); // Coloca vertice depois de iterado para dentro da lista de vertices finalizados.
     }
 
+    /**
+     *  Retora a transposta do grafo.
+     */
     public Map<String, List<String>> getTranspose() {
-        Map<String, List<String>> transpose = new HashMap<>();
+        Map<String, List<String>> transpose = new HashMap<>(); // Inicializa variavel de transposta.
         for (String node : graph.keySet()) {
-            transpose.put(node, new ArrayList<>());
+            transpose.put(node, new ArrayList<>()); // Adiciona os vertices do grafo, sem vizinhos, para a transposta
         }
-        for (String node : graph.keySet()) {
-            for (String neighbor : graph.get(node)) {
-                transpose.get(neighbor).add(node);
+        for (String node : graph.keySet()) { // Itera cada vertice do grafo.
+            for (String neighbor : graph.get(node)) { // Itera cada vizinho do vertice iterado
+                transpose.get(neighbor).add(node); // Faz adição inversa de vizinho no grafo, assim gerando a transposta aos poucos.
             }
         }
-        return transpose;
+        return transpose; // Retorno da transposta completa.
     }
 
+
+    /**
+     * Realiza DFS especifíca da transposta e retornando o resultado com os componentes finais.
+     */
     public List<List<String>> dfsTranspose(Map<String, List<String>> transpose, List<String> sortedNodes) {
         List<List<String>> result = new ArrayList<>();
         Set<String> visited = new HashSet<>();
-        for (String node : sortedNodes) {
-            if (!visited.contains(node)) {
-                List<String> component = new ArrayList<>();
-                dfsTransposeVisit(node, transpose, visited, component);
-                result.add(component);
+        for (String node : sortedNodes) {  // Iteração do dfs, seguindo agora a ordem gerada pelo dfs do grafo padrão.
+            if (!visited.contains(node)) { // Mesmo processo, verificando se vertice já foi marcado como visitado.
+                List<String> component = new ArrayList<>(); // Inicializa componente
+                dfsTransposeVisit(node, transpose, visited, component); // Realiza dfs no vertice.
+                result.add(component); // Adiciona o componente gerado a partir do dfs no resultado final.
             }
         }
-        return result;
+        return result; // Retorna resultado final.
     }
 
-
-
+    /**
+     * DFS Para cada vertice da transposta.
+     */
     private void dfsTransposeVisit(String node, Map<String, List<String>> transpose, Set<String> visited, List<String> component) {
-        visited.add(node);
-        component.add(node);
-        for (String neighbor : transpose.get(node)) {
-            if (!visited.contains(neighbor)) {
-                dfsTransposeVisit(neighbor, transpose, visited, component);
+        visited.add(node); // Marca o vertice como visitado.
+        component.add(node); // Adiciona o vertice no componente.
+        for (String neighbor : transpose.get(node)) { // Itera os vizinhos do vertice.
+            if (!visited.contains(neighbor)) { // Verifica se vizinho ja foi marcado como visitado.
+                dfsTransposeVisit(neighbor, transpose, visited, component); // Realiza a recursividade para buscar todos os vizinhos que form o componente.
             }
         }
     }
